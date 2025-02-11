@@ -13,7 +13,7 @@
 ## Запуск проекта в режиме разработки 
 Склонируйте проект
 ```bash
-git clone https://github.com/belyashnikovatn/
+git clone git@github.com:belyashnikovatn/Avito-shop.git
 ```
 В терминале выполните команды:
 ```bash
@@ -23,7 +23,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 cd avito_shop/
 python manage.py migrate
-LOADDATA
+python manage.py initadmin
 python manage.py runserver
 ```
 
