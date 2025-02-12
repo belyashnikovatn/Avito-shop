@@ -17,7 +17,9 @@ from api.serializers import (
     AuthSerializer,
     BuySerializer,
     SendCoinSerializer,
+    MerchSerializer,
 )
+from rest_framework import filters, mixins, permissions, viewsets
 from api.models import Profile, Gift, Buy, Merch
 
 
@@ -65,6 +67,7 @@ class AuthView(APIView):
 
 
 class InfoView(APIView):
+    """Получить информацию о монетах, инвентаре и истории транзакций."""
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -158,3 +161,9 @@ class SendCoinView(APIView):
                 {'description': f'Внутренняя ошибка сервера: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+class MerchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Дополнительное представление для мерча."""
+    queryset = Merch.objects.all()
+    serializer_class = MerchSerializer

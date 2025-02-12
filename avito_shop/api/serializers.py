@@ -72,3 +72,9 @@ class SendCoinSerializer(serializers.Serializer):
                 {'error': 'Недостаточно монет для передачи.'})
 
         return data
+
+
+class MerchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Merch
+        fields = ('__all__')
