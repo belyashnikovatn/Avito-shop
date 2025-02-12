@@ -69,7 +69,7 @@ class Gift(models.Model):
         verbose_name_plural = 'Подарки'
 
     def __str__(self):
-        return f'{self.from_user} подарил {self.to_user} {self.amount}'
+        return f'{self.from_user} подарил(а) {self.to_user} {self.amount}'
 
 
 class Buy(models.Model):
@@ -94,4 +94,4 @@ class Buy(models.Model):
         verbose_name_plural = 'Покупки'
 
     def __str__(self):
-        return f'{self.user} купил {self.merch}'
+        return f'{self.user} купил(а) {self.merch}'

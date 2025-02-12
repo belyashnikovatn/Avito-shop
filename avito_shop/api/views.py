@@ -22,28 +22,46 @@ from api.models import Profile, Gift, Buy, Merch
 
 
 class AuthView(APIView):
+    """
+    Аутентификация и получение JWT-токена.
+    При первой аутентификации
+    пользователь создается автоматически.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = AuthSerializer(data=request.data)
+        try:
+            # проверка данных
+            serializer = AuthSerializer(data=request.data)
 
-        if serializer.is_valid():
-            username = serializer.validated_data['username']
-            password = serializer.validated_data['password']
+            # основная логика представления
+            if serializer.is_valid():
+                username = serializer.validated_data['username']
+                password = serializer.validated_data['password']
 
-            user = authenticate(username=username, password=password)
+                user = authenticate(username=username, password=password)
 
-            if user is None:
-                user = Profile.objects.create_user(
-                    username=username, password=password)
+                if user is None:
+                    user = Profile.objects.create_user(
+                        username=username, password=password)
 
-            token = RefreshToken.for_user(user).access_token
+                token = RefreshToken.for_user(user).access_token
 
-            return Response({
-                'token': str(token)
-            }, status=status.HTTP_200_OK)
+                return Response({
+                    'description': 'Успешная аутентификация.',
+                    'JWT-токен для доступа к защищенным ресурсам.': str(token),
+                }, status=status.HTTP_200_OK)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'description': 'Неверный запрос.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        except Exception as e:
+            return Response(
+                {'description': f'Внутренняя ошибка сервера: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class InfoView(APIView):
@@ -61,6 +79,7 @@ class ByeView(APIView):
 
     def get(self, request, slug):
         try:
+            # проверка данных
             serializer = BuySerializer(
                 data=request.data,
                 context={
@@ -95,23 +114,23 @@ class ByeView(APIView):
 
 
 class SendCoinView(APIView):
+    """Отправить монеты другому пользователю."""
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         try:
-
+            # проверка данных
             serializer = SendCoinSerializer(
                 data=request.data,
                 context={
                     'request': request,
-                    'to_user': request.data['toUser'],
-                    'amount': request.data['amount']
+                    'to_user': request.data.get('toUser'),
+                    'amount': request.data.get('amount')
                 }
             )
             # основная логика представления
             if serializer.is_valid():
                 from_user = Profile.objects.get(username=request.user)
-                print(serializer.data)
                 to_user = Profile.objects.get(
                     username=request.data['toUser'])
                 amount = request.data['amount']

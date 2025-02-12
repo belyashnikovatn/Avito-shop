@@ -37,14 +37,19 @@ class SendCoinSerializer(serializers.Serializer):
         Проверка:
         - наличие объектов пользователи, количество
         - количества: целое число, больше 0
-        - достаточного количества монет у пользователя.
+        - достаточного количества монет у пользователя
+        - польозователь не сам он.
         """
         from_user = self.context['request'].user
         to_user = self.context.get('to_user')
         amount = self.context.get('amount')
 
         from_user = get_object_or_404(Profile, username=from_user)
-        get_object_or_404(Profile, username=to_user)
+        to_user = get_object_or_404(Profile, username=to_user)
+
+        if to_user == from_user:
+            raise serializers.ValidationError(
+                {'error': 'Нельзя переводить деньги себе.'})
 
         if amount is None:
             raise serializers.ValidationError(
