@@ -9,6 +9,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.exceptions import ObjectDoesNotExist
+
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from api.serializers import (
@@ -54,27 +56,44 @@ class InfoView(APIView):
 
 
 class ByeView(APIView):
+    """Купить предмет за монеты."""
     permission_classes = [IsAuthenticated]
 
     def get(self, request, slug):
-        serializer = BuySerializer(
-            data=request.data,
-            context={
-                'request': request,
-                'merch': slug
-            }
-        )
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer = BuySerializer(
+                data=request.data,
+                context={
+                    'request': request,
+                    'merch': slug
+                }
+            )
+            if serializer.is_valid():
+                user = Profile.objects.get(username=request.user)
+                merch = Merch.objects.get(name=slug)
 
-        buy = serializer.save(merch=slug)
-        return Response({'message': '123123123'}, status=status.HTTP_201_CREATED)
+                user.coins -= merch.price
+                user.save()
+                Buy.objects.create(user=user, merch=merch)
+                return Response(
+                    {'description': 'Успешный ответ.'},
+                    status=status.HTTP_200_OK
+                )
 
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'description': 'Неверный запрос.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        except Exception as e:
+            return Response(
+                {'description': f'Внутренняя ошибка сервера: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class SendCoinView(APIView):
     permission_classes = [IsAuthenticated]
-    http_method_names = ['post']
 
     def post(self, request):
         serializer = SendCoinSerializer(data=request.data)

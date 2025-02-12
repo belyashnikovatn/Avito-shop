@@ -12,7 +12,11 @@ class AuthSerializer(serializers.Serializer):
 class BuySerializer(serializers.Serializer):
 
     def validate(self, data):
-        """Проверка достаточного количества монет у пользователя."""
+        """
+        Проверка:
+        - наличие объектов мерч и пользователь
+        - достаточного количества монет у пользователя.
+        """
         user = self.context['request'].user
         merch = self.context.get('merch')
 
@@ -24,15 +28,6 @@ class BuySerializer(serializers.Serializer):
                 {'error': 'Недостаточно монет для покупки.'})
 
         return data
-
-    def create(self, validated_data):
-        """Создание покупки и списание монет у пользователя."""
-        user = self.context['request'].user
-        merch = get_object_or_404(Merch, name=validated_data.get('merch'))
-
-        user.coins -= merch.price
-        user.save()
-        return Buy.objects.create(user=user, merch=merch)
 
 
 class SendCoinSerializer(serializers.Serializer):
