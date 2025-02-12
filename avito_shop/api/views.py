@@ -23,36 +23,29 @@ class AuthView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        # Получаем данные из запроса
         serializer = AuthRequestSerializer(data=request.data)
         
-        # Проверяем, что данные валидны
         if serializer.is_valid():
             username = serializer.validated_data['username']
             password = serializer.validated_data['password']
             
-            # Попытка аутентификации пользователя
             user = authenticate(username=username, password=password)
             
-            # Если пользователь не существует, создаем нового
             if user is None:
-                # Создаем нового пользователя
-                user = Profile.objects.create_user(username=username, password=password)
+                user = Profile.objects.create_user(
+                    username=username, password=password)
             
-            # Генерируем JWT-токен для пользователя
             token = RefreshToken.for_user(user).access_token
             
-            # Возвращаем токен в ответе
             return Response({
-                "token": str(token)
+                'token': str(token)
             }, status=status.HTTP_200_OK)
         
-        # В случае ошибки валидации данных
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class InfoView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         return Response({
@@ -60,8 +53,17 @@ class InfoView(APIView):
         })
 
 
+class ByeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, slug):
+        return Response({
+            'Here you gonna bye some stuff ': slug,
+        })
+
+
 class SendCoinView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     http_method_names = ['post']
 
     def post(self, request):
@@ -79,30 +81,3 @@ class SendCoinView(APIView):
             return Response({"message": f"Sent {amount} coins to {to_user}"}, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class AuthView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request):
-#         username = request.data.get("username")
-#         password = request.data.get("password")
-
-#         if not username or not password:
-#             return Response({"error": "Username and password are required"}, status=status.HTTP_400_BAD_REQUEST)
-
-#         user, created = Profile.objects.get_or_create(username=username)
-        
-#         if created:
-#             user.set_password(password)  # Хешируем пароль
-#             user.save()
-#         else:
-#             user = authenticate(username=username, password=password)
-#             if user is None:
-#                 return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-
-#         refresh = RefreshToken.for_user(user)
-#         return Response({
-#             "refresh": str(refresh),
-#             "access": str(refresh.access_token)
-#         })
