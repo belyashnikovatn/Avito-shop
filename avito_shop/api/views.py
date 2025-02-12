@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -9,18 +7,23 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.core.exceptions import ObjectDoesNotExist
 
-from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
 from api.serializers import (
     AuthSerializer,
     BuySerializer,
     SendCoinSerializer,
     MerchSerializer,
+    InventorySerializer,
+    CoinHistoryReceivedSerializer,
+    CoinHistorySentSerializer,
+    ProfileDetailSerializer,
 )
-from rest_framework import filters, mixins, permissions, viewsets
+from rest_framework import viewsets
 from api.models import Profile, Gift, Buy, Merch
+from rest_framework import serializers, viewsets
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.db.models import Count, Sum
 
 
 class AuthView(APIView):
@@ -167,3 +170,13 @@ class MerchViewSet(viewsets.ReadOnlyModelViewSet):
     """Дополнительное представление для мерча."""
     queryset = Merch.objects.all()
     serializer_class = MerchSerializer
+
+
+
+class InfoViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        profile = request.user
+        serializer = ProfileDetailSerializer(profile)
+        return Response(serializer.data)
