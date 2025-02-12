@@ -1,0 +1,82 @@
+[
+{
+  "model": "api.merch",
+  "pk": 1,
+  "fields": {
+    "name": "t-shirt",
+    "price": 80
+  }
+},
+{
+  "model": "api.merch",
+  "pk": 2,
+  "fields": {
+    "name": "cup",
+    "price": 20
+  }
+},
+{
+  "model": "api.merch",
+  "pk": 3,
+  "fields": {
+    "name": "book",
+    "price": 50
+  }
+},
+{
+  "model": "api.merch",
+  "pk": 4,
+  "fields": {
+    "name": "pen",
+    "price": 10
+  }
+},
+{
+  "model": "api.merch",
+  "pk": 5,
+  "fields": {
+    "name": "powerbank",
+    "price": 200
+  }
+},
+{
+  "model": "api.merch",
+  "pk": 6,
+  "fields": {
+    "name": "hoody",
+    "price": 300
+  }
+},
+{
+  "model": "api.merch",
+  "pk": 7,
+  "fields": {
+    "name": "umbrella",
+    "price": 200
+  }
+},
+{
+  "model": "api.merch",
+  "pk": 8,
+  "fields": {
+    "name": "socks",
+    "price": 10
+  }
+},
+{
+  "model": "api.merch",
+  "pk": 9,
+  "fields": {
+    "name": "wallet",
+    "price": 50
+  }
+},
+{
+  "model": "api.merch",
+  "pk": 10,
+  "fields": {
+    "name": "pink-hoody",
+    "price": 500
+  }
+}
+]
