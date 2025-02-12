@@ -30,8 +30,6 @@
 | /api/buy/{item}  | get (Странно, что get, вроде не по REST) | Купить предмет за монеты.  |Авторизованный юзер  |
 | /api/auth  | post | Аутентификация и получение JWT-токена. При первой аутентификации пользователь создается автоматически.  |Любой юзер |
 
-замечания
-странно, что для покупки используется метод get и возвращается 200. Ведь мы создаём объект. Но поскольку в ТЗ написано именно так, то так и реализовано
 
 ## Уровень моделей
 - Profile: username, coins(default=1000)
@@ -58,6 +56,7 @@ pip install -r requirements.txt
 cd avito_shop/
 python manage.py migrate
 python manage.py initadmin
+python manage.py loaddata merch.json
 python manage.py runserver
 ```
 

@@ -1,29 +1,13 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from rest_framework import status
+from rest_framework import status, viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 
-from api.serializers import (
-    AuthSerializer,
-    BuySerializer,
-    SendCoinSerializer,
-    MerchSerializer,
-    InventorySerializer,
-    CoinHistoryReceivedSerializer,
-    CoinHistorySentSerializer,
-    ProfileDetailSerializer,
-)
-from rest_framework import viewsets
-from api.models import Profile, Gift, Buy, Merch
-from rest_framework import serializers, viewsets
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from django.db.models import Count, Sum
+from api.models import Buy, Gift, Merch, Profile
+from api.serializers import (AuthSerializer, BuySerializer, MerchSerializer,
+                             ProfileDetailSerializer, SendCoinSerializer)
 
 
 class AuthView(APIView):
@@ -172,8 +156,8 @@ class MerchViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MerchSerializer
 
 
-
 class InfoViewSet(viewsets.ViewSet):
+    """Получить информацию о монетах, инвентаре и истории транзакций."""
     permission_classes = [IsAuthenticated]
 
     def list(self, request):

@@ -1,8 +1,9 @@
-from rest_framework import serializers
-from django.shortcuts import get_object_or_404
-
-from api.models import Gift, Buy, Profile, Merch
 from django.db.models import Count, Sum
+from django.shortcuts import get_object_or_404
+from rest_framework import serializers
+
+from api.models import Buy, Gift, Merch, Profile
+
 
 class AuthSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
@@ -12,11 +13,11 @@ class AuthSerializer(serializers.Serializer):
 class BuySerializer(serializers.Serializer):
 
     def validate(self, data):
-        '''
+        """
         Проверка:
         - наличие объектов мерч и пользователь
         - достаточного количества монет у пользователя.
-        '''
+        """
         user = self.context['request'].user
         merch = self.context.get('merch')
 
@@ -33,13 +34,13 @@ class BuySerializer(serializers.Serializer):
 class SendCoinSerializer(serializers.Serializer):
 
     def validate(self, data):
-        '''
+        """
         Проверка:
         - наличие объектов пользователи, количество
         - количества: целое число, больше 0
         - достаточного количества монет у пользователя
         - польозователь не сам он.
-        '''
+        """
         from_user = self.context['request'].user
         to_user = self.context.get('to_user')
         amount = self.context.get('amount')

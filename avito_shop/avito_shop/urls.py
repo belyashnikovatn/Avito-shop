@@ -1,7 +1,13 @@
 
 from django.contrib import admin
 from django.urls import path
-from api.views import AuthView, ByeView, InfoView, SendCoinView, MerchViewSet, InfoViewSet
+from api.views import (
+    AuthView,
+    ByeView,
+    InfoViewSet,
+    MerchViewSet,
+    SendCoinView,
+)
 
 
 urlpatterns = [
