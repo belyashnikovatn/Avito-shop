@@ -31,5 +31,39 @@ class BuySerializer(serializers.Serializer):
 
 
 class SendCoinSerializer(serializers.Serializer):
-    toUser = serializers.CharField(max_length=150)
-    amount = serializers.IntegerField(min_value=1)
+
+    def validate(self, data):
+        """
+        Проверка:
+        - наличие объектов пользователи, количество
+        - количества: целое число, больше 0
+        - достаточного количества монет у пользователя.
+        """
+        from_user = self.context['request'].user
+        to_user = self.context.get('to_user')
+        amount = self.context.get('amount')
+
+        from_user = get_object_or_404(Profile, username=from_user)
+        get_object_or_404(Profile, username=to_user)
+
+        if amount is None:
+            raise serializers.ValidationError(
+                {'error': 'Укажите количество.'})
+
+        if not to_user:
+            raise serializers.ValidationError(
+                {'error': 'Укажите пользователя.'})
+
+        if not isinstance(amount, int):
+            raise serializers.ValidationError(
+                {'error': 'Это не целое число.'})
+
+        if amount <= 0:
+            raise serializers.ValidationError(
+                {'error': 'Перевод должен быть больше 0.'})
+
+        if from_user.coins < amount:
+            raise serializers.ValidationError(
+                {'error': 'Недостаточно монет для передачи.'})
+
+        return data

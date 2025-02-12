@@ -68,6 +68,8 @@ class ByeView(APIView):
                     'merch': slug
                 }
             )
+
+            # основная логика представления
             if serializer.is_valid():
                 user = Profile.objects.get(username=request.user)
                 merch = Merch.objects.get(name=slug)
@@ -96,16 +98,44 @@ class SendCoinView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = SendCoinSerializer(data=request.data)
-        if serializer.is_valid():
-            to_user = serializer.validated_data['toUser']
-            amount = serializer.validated_data['amount']
+        try:
 
-            # Проверяем, существует ли получатель
-            recipient = get_object_or_404(Profile, username=to_user)
+            serializer = SendCoinSerializer(
+                data=request.data,
+                context={
+                    'request': request,
+                    'to_user': request.data['toUser'],
+                    'amount': request.data['amount']
+                }
+            )
+            # основная логика представления
+            if serializer.is_valid():
+                from_user = Profile.objects.get(username=request.user)
+                print(serializer.data)
+                to_user = Profile.objects.get(
+                    username=request.data['toUser'])
+                amount = request.data['amount']
 
-            # Здесь добавить логику перевода монет
+                from_user.coins -= amount
+                from_user.save()
+                to_user.coins += amount
+                to_user.save()
+                Gift.objects.create(
+                    from_user=from_user,
+                    to_user=to_user,
+                    amount=amount)
+                return Response(
+                    {'description': 'Успешный ответ.'},
+                    status=status.HTTP_200_OK
+                )
 
-            return Response({"message": f"Sent {amount} coins to {to_user}"}, status=status.HTTP_200_OK)
+            return Response(
+                {'description': 'Неверный запрос.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(
+                {'description': f'Внутренняя ошибка сервера: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
