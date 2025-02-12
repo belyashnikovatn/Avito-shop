@@ -35,10 +35,13 @@
 ## Уровень моделей
 - Profile: username, coins(default=1000)
 - Merch: name, price
+- Gift: sender, reciever, amount, datetime
+- Buy: user, merch, datetime 
 
 ## Уровень сериализаторов
 
 ## Уровень представлений
+
 
 ## Запуск проекта в режиме разработки 
 Склонируйте проект
