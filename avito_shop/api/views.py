@@ -6,8 +6,13 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.models import Buy, Gift, Merch, Profile
-from api.serializers import (AuthSerializer, BuySerializer, MerchSerializer,
-                             ProfileDetailSerializer, SendCoinSerializer)
+from api.serializers import (
+    AuthSerializer,
+    BuySerializer,
+    MerchSerializer,
+    ProfileDetailSerializer,
+    SendCoinSerializer
+)
 
 
 class AuthView(APIView):
