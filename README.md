@@ -1,9 +1,15 @@
 # Avito-shop
+Сервис для магазина мерча, где сотрудники могут приобретать товары за монеты. Каждому новому сотруднику выделяется 1000 монет, которые можно использовать для покупки товаров. Кроме того, монеты можно передавать другим сотрудникам в знак благодарности или как подарок. Подробное ТЗ находится [здесь](https://github.com/avito-tech/tech-internship/blob/main/Tech%20Internships/Backend/Backend-trainee-assignment-winter-2025/Backend-trainee-assignment-winter-2025.md)
+
+
+[Перейти к запуску через докер](#запуск-проекта-в-контейнерах)
+[Перейти к примерам](#примеры-работы)
+
 
 ## Стек:
-на стадии разработки: Python 3.9, Django, DRF, SQLite
-+ для деплоя: Docker, Gunicorn, nginx, Postgres
-
+Python 3.9, Django, DRF, SQLite (на время разработки)  
+Docker, Gunicorn, nginx, Postgres (для продуктивной среды)  
+Все требования описаны в avito_shop/requirements.txt 
 
 ## Функционал:
 ### Для пользователя "Сотрудник"
@@ -28,6 +34,7 @@
 - [x] Продумать уровень логики
 - [x] Разделить настройки на тест и прод среды
 - [x] Настроить контейнеризацию 
+- [ ] Тестирование
 
 ## Проектирование
 - Модель данных ERD
@@ -45,7 +52,7 @@
 
 
 ## Уровень моделей
-Структура данных и связи между ними представлены на уровне моделей (avito_shop/api/models.py). Модели настроены так, чтобы в админке с ними было удобно работать (verbose_name и def __str__(self)). Краткое описание моделей:  
+Структура данных и связи между ними представлены на уровне моделей (avito_shop/api/models.py). Модели настроены так, чтобы в админке с ними было удобно работать (verbose_name и def __str__). Краткое описание моделей:  
 - Profile: username, coins(default=1000)
 - Merch: name, price
 - Gift: sender, reciever, amount, datetime
@@ -85,9 +92,12 @@ python manage.py loaddata merch.json
 python manage.py runserver
 ```
 
-## Запуск проекта 
-убедитесь, что у вас установлен и запущен Docker
-В корне проекта выполните команду:
+## Запуск проекта в контейнерах
+Склонируйте проект
+```bash
+git clone git@github.com:belyashnikovatn/Avito-shop.git
+```
+Убедитесь, что Docker запущен, .env создан и заполнен по примеру. В корне проекта выполните команду:
 ```bash
 docker-compose up --build  -d
 ```
@@ -99,3 +109,7 @@ http://localhost:8080/api/auth/
 http://localhost:8080/api/info/
 http://localhost:8080/api/buy/{item}/
 http://localhost:8080/api/sendCoin/
+
+
+## Примеры работы
+
