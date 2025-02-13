@@ -1,8 +1,9 @@
 # Avito-shop
 
 ## Стек:
-Python 3.9, Django, DRF  
-Docker, Gunicorn, nginx 
+на стадии разработки: Python 3.9, Django, DRF, SQLite
++ для деплоя: Docker, Gunicorn, nginx, Postgres
+
 
 ## Функционал:
 - авторизация
@@ -17,7 +18,7 @@ Docker, Gunicorn, nginx
 ## Задачи
 - [x] Спроектировать модель данных 
 - [x] Создать проект, приложение, настроить среду
-- [x] Выбрать модель для профиля (User)
+- [x] Выбрать модель для профиля (переписать User)
 - [x] Продумать ручки
 - [x] Создать модели
 - [x] Продумать уровень валидации
@@ -27,6 +28,8 @@ Docker, Gunicorn, nginx
 
 ## Проектирование
 - Модель данных ERD
+<img src="screens/erdiagram.png" alt="Модель данных ERD" width="200">
+
 - Ручки (дополнительно: вывод мерча для всех, список всех юзеров для админа)
 
 | url       | method       | что делает      | кто может      |
@@ -48,7 +51,9 @@ Docker, Gunicorn, nginx
 ## Уровень представлений
 
 ## Настройка деплоя
-
+- Для деплоя используется Docker: avito_shop/Dockerfile + docker-compose.yml
+- В docker-compose.yml прописаны контейнеры для БД (postgres_db), бэкенда (avito_backend) и прокси-сервера (nginx_proxy)
+- При запуске контейнера бэкенда исполняется файл run.sh, в котором прописаны миграции БД, сбор и копирование стактики, создание админа и загрузка справочника товаров.
 
 # Запуск проекта
 ## Запуск проекта в режиме разработки 
@@ -83,5 +88,3 @@ http://localhost:8080/api/auth/
 http://localhost:8080/api/info/
 http://localhost:8080/api/buy/{item}/
 http://localhost:8080/api/sendCoin/
-
-
