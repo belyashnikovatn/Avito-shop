@@ -1,0 +1,51 @@
+volumes:
+  media:
+  static:
+  postgres_data:
+
+services:
+
+  postgres_db:
+    image: postgres:15
+    env_file: .env
+    container_name: postgres_db
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - web
+
+  backend:
+    container_name: avito_backend
+    build: ./avito_shop/
+    env_file: .env
+    volumes:
+      - static:/backend_static
+      - media:/media/
+    depends_on:
+      - postgres_db
+    networks:
+      - web
+
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    ports:
+      - 8080:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - media:/media
+      - static:/staticfiles
+    depends_on:
+      - backend
+    networks:
+      - web
+
+networks:
+  web:
