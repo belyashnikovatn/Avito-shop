@@ -58,16 +58,6 @@ class AuthView(APIView):
             )
 
 
-class InfoView(APIView):
-    """Получить информацию о монетах, инвентаре и истории транзакций."""
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        return Response({
-            'user': str(self.request.user),
-        })
-
-
 class ByeView(APIView):
     """Купить предмет за монеты."""
     permission_classes = [IsAuthenticated]
