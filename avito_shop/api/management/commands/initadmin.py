@@ -19,9 +19,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        username = os.getenv('username', 'admin')
-        email = os.getenv('email', 'belyashnikova.tn@gmail.com')
-        password = os.getenv('password', '12345678')
+        username = os.getenv('username', 'admin_avito')
+        email = os.getenv('email', 'admin_example@gmail.com')
+        password = os.getenv('password', 'avito_12345678')
 
         if not User.objects.filter(username=username).exists():
             logging.info('Создаю аккаунт для %s (%s)' % (username, email))

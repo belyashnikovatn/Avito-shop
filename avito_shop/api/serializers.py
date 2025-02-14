@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, Sum
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -21,8 +22,20 @@ class BuySerializer(serializers.Serializer):
         user = self.context['request'].user
         merch = self.context.get('merch')
 
-        merch = get_object_or_404(Merch, name=merch)
-        user = get_object_or_404(Profile, username=user)
+        # user = get_object_or_404(Profile, username=user)
+        try:
+            user = Profile.objects.get(username=user)
+        except Profile.DoesNotExist:
+            raise serializers.ValidationError(
+                {'error': 'Пользователь не найден.'},
+            )
+        try:
+            merch = Merch.objects.get(name=merch)
+        except Merch.DoesNotExist:
+            raise serializers.ValidationError(
+                {'error': 'Мерч не найден.'},
+            )
+        # merch = get_object_or_404(Merch, name=merch)
 
         if user.coins < merch.price:
             raise serializers.ValidationError(
@@ -45,8 +58,20 @@ class SendCoinSerializer(serializers.Serializer):
         to_user = self.context.get('to_user')
         amount = self.context.get('amount')
 
-        from_user = get_object_or_404(Profile, username=from_user)
-        to_user = get_object_or_404(Profile, username=to_user)
+        # from_user = get_object_or_404(Profile, username=from_user)
+        try:
+            from_user = Profile.objects.get(username=from_user)
+        except Profile.DoesNotExist:
+            raise serializers.ValidationError(
+                {'error': 'Пользователь не найден.'},
+            )
+        try:
+            to_user = Profile.objects.get(username=to_user)
+        except Profile.DoesNotExist:
+            raise serializers.ValidationError(
+                {'error': 'Пользователь не найден.'},
+            )
+        # to_user = get_object_or_404(Profile, username=to_user)
 
         if to_user == from_user:
             raise serializers.ValidationError(
