@@ -7,7 +7,7 @@
 - Для настройки линтера используется конфигурационный файл `setup.cfg`
 
 [Сразу перейти к запуску через докер](#запуск-проекта-в-контейнерах)  
-[Глянуть на реализацию тестирования](#тестирование)
+[Глянуть на реализацию тестирования](#тестирование)  
 [Посмотреть на примеры](#примеры-работы-сервиса)
 
 ## Содержание
@@ -126,7 +126,7 @@ pytest
 ## Запуск проекта в режиме разработки 
 Склонируйте проект
 ```bash
-git clone git@github.com:belyashnikovatn/Avito-shop.git
+git clone https://github.com/belyashnikovatn/Avito-shop.git
 ```
 В терминале выполните команды:
 ```bash
@@ -146,7 +146,7 @@ python manage.py runserver
 ## Запуск проекта в контейнерах
 Склонируйте проект
 ```bash
-git clone git@github.com:belyashnikovatn/Avito-shop.git
+git clone https://github.com/belyashnikovatn/Avito-shop.git
 ```
 Убедитесь, что Docker запущен. В корне проекта выполните команду:
 ```bash
