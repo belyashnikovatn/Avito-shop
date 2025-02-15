@@ -10,5 +10,5 @@ gunicorn==20.1.0
 psycopg2-binary
 pytest-django==4.5.2
 pytest==7.1.3
+pytest-benchmark
 djangorestframework-simplejwt
-drf-yasg
