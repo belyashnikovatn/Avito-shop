@@ -14,7 +14,7 @@ def api_client():
 def user():
     """Создаем тестового пользователя."""
     return Profile.objects.create_user(
-        username='testuser', password='password123', coins=1000)
+        username='testuser', password='password123')
 
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def test_successful_purchase(api_client, user, merch):
     """Тест успешной покупки мерча."""
     api_client.force_authenticate(user=user)
 
-    response = api_client.get(f'/api/buy/{merch.name}/')
+    response = api_client.post(f'/api/buy/{merch.name}/')
 
     user.refresh_from_db()
 
@@ -44,7 +44,7 @@ def test_purchase_not_enough_coins(api_client, user, merch):
     user.save()
 
     api_client.force_authenticate(user=user)
-    response = api_client.get(f'/api/buy/{merch.name}/')
+    response = api_client.post(f'/api/buy/{merch.name}/')
 
     user.refresh_from_db()
 
@@ -58,7 +58,7 @@ def test_purchase_nonexistent_merch(api_client, user):
     """Тест покупки несуществующего мерча."""
     api_client.force_authenticate(user=user)
 
-    response = api_client.get('/api/buy/nonexistent-merch/')
+    response = api_client.post('/api/buy/nonexistent-merch/')
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
@@ -66,6 +66,6 @@ def test_purchase_nonexistent_merch(api_client, user):
 @pytest.mark.django_db
 def test_unauthorized_purchase(api_client, merch):
     """Тест неавторизованного запроса."""
-    response = api_client.get(f'/api/buy/{merch.name}/')
+    response = api_client.post(f'/api/buy/{merch.name}/')
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED

@@ -62,7 +62,7 @@ class ByeView(APIView):
     """Купить предмет за монеты."""
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, slug):
+    def post(self, request, slug):
         try:
             # проверка данных
             serializer = BuySerializer(
