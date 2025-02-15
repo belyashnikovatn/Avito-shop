@@ -6,6 +6,8 @@ from api.models import Gift, Profile
 
 @pytest.mark.django_db
 def test_send_coins():
+    """E2E тест для передачи монеток."""
+
     client1 = APIClient()
     client2 = APIClient()
 
