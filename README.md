@@ -135,7 +135,11 @@ pytest
 ```bash
 git clone https://github.com/belyashnikovatn/Avito-shop.git
 ```
-В терминале выполните команды:
+Перейдите в папку проекта:
+```bash
+cd Avito-shop/
+```
+Выполните команды:
 ```bash
 python -m venv venv
 source venv/Scripts/activate
@@ -155,11 +159,15 @@ python manage.py runserver
 ```bash
 git clone https://github.com/belyashnikovatn/Avito-shop.git
 ```
+Перейдите в папку проекта:
+```bash
+cd Avito-shop/
+```
 Убедитесь, что Docker запущен. В корне проекта выполните команду:
 ```bash
 docker-compose up --build  -d
 ```
-После этого проект будет доступен по адресу http://localhost:8080/
+После этого сервис будет доступен по адресу http://localhost:8080/
 
 Эндпоинты:
 - http://localhost:8080/api/merch/
